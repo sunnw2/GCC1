@@ -4,7 +4,7 @@
 #include "MoveLeftRight.h"
 
 // Sets default values
-AMoveLeftRight::AMoveLeftRight()
+AMoveLeftRight::AMoveLeftRight():isMoveRight(true), LocX(0)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -18,6 +18,11 @@ AMoveLeftRight::AMoveLeftRight()
 	Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+
+	SetRootComponent(Scene); //Scene을 RootComponent로 만들기(SetRootComponent 메서드)
+
+	StaticMesh->AttachToComponent(Scene, FAttachmentTransformRules::KeepRelativeTransform); //StaticMesg를 상대 좌표계 기준으로 Scen(RootComponent)에 붙임
+	StaticMesh->SetRelativeTransform(FTransform::Identity);//StaticMesh의 Transform을 초기값으로 설정
 
 }
 
@@ -33,5 +38,30 @@ void AMoveLeftRight::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+
+	if (isMoveRight) 
+	{
+		//True
+		LocX += 1;
+
+		StaticMesh->SetRelativeLocation(FVector(LocX, 0, 0));
+
+		if (StaticMesh->GetRelativeLocation().X > 200) {
+			isMoveRight = false;
+			
+		}
+	}
+	else 
+	{
+		//False
+		LocX -= 1;
+
+		StaticMesh->SetRelativeLocation(FVector(LocX, 0, 0));
+
+		if (StaticMesh->GetRelativeLocation().X < 0) {
+			isMoveRight = true;
+		}
+	}
 }
 

@@ -4,16 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MoveLeftRight.generated.h" //Unral Class 라이브러리 생성
+#include "MoveRect.generated.h"
 
-UCLASS() //Unreal Class 옵션 입력
-class UNREALCODE_API /*모듈 API 이름*/ AMoveLeftRight : public AActor
+UENUM(BlueprintType)
+enum class EN_MoveType : uint8
 {
-	GENERATED_BODY() //Unreal 코드 생성 처리
+	MoveRight UMETA(display = "Right"),
+	MoveUp UMETA(display = "Up"),
+	MoveLeft UMETA(display = "Left"),
+	MoveDown UMETA(display = "Down"),
+};
+
+UCLASS()
+class UNREALCODE_API AMoveRect : public AActor
+{
+	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMoveLeftRight(); //class가 생성될 때 실행
+	AMoveRect();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,16 +32,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	USceneComponent* Scene;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	UStaticMeshComponent* StaticMesh;
 
+	float LocX, LocZ;
 
-	UPROPERTY(BlueprintReadOnly)
-	bool isMoveRight;
+	EN_MoveType MoveType;
 
-	float LocX;
 };
